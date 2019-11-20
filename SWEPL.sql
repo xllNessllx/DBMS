@@ -1,6 +1,7 @@
 USE `swepl`;
 
 DROP TABLE IF EXISTS `ist in`;
+DROP TABLE IF EXISTS `Termin`;
 DROP TABLE IF EXISTS `Gruppe`;
 DROP TABLE IF EXISTS `Semester`;
 DROP TABLE IF EXISTS `Benutzer`;
@@ -16,7 +17,7 @@ CREATE TABLE Benutzer(
 );
 
 CREATE TABLE Semester(
-	Kennung INT UNSIGNED NOT NULL,
+	Kennung INT UNSIGNED NOT NULL, -- fix data type
 	Jahr YEAR NOT NULL DEFAULT YEAR(CURRENT_DATE),
 	CONSTRAINT Semester_primär PRIMARY KEY (Kennung),
 	CONSTRAINT Semester_eindeutig UNIQUE (Kennung)
@@ -26,8 +27,8 @@ CREATE TABLE Gruppe(
 	Gruppennummer INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	Betreuer_1_FK INT UNSIGNED,
 	Betreuer_2_FK INT UNSIGNED,
-	Semester_FK INT UNSIGNED,
-	CONSTRAINT Gruppe_primär PRIMARY KEY (Gruppennummer),
+	Semester_FK INT UNSIGNED, -- fix data type
+	CONSTRAINT Gruppe_primär PRIMARY KEY (Gruppennummer,Semester_FK),
 	CONSTRAINT `Gruppe wird betreut` FOREIGN KEY (Betreuer_1_FK) REFERENCES `Benutzer`(ID),
 	CONSTRAINT `Gruppe wird betreut 2` FOREIGN KEY (Betreuer_2_FK) REFERENCES `Benutzer`(ID),
 	CONSTRAINT `Gruppe ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung),
@@ -40,6 +41,16 @@ CREATE TABLE Student(
 	Nachname VARCHAR(50) NOT NULL,
 	CONSTRAINT Student_primär PRIMARY KEY (Matrikelnummer),
 	CONSTRAINT Student_eindeutig UNIQUE (Matrikelnummer)
+);
+
+CREATE TABLE Termin(
+	Datum DATE NOT NULL,
+	Semester_FK INT UNSIGNED, -- fix: data type
+	Kommentar VARCHAR(255),
+	Bewertung TINYINT NOT NULL, -- fix: data type
+	Ampelstatus ENUM('Grün','Gelb','Rot') NOT NULL,
+	CONSTRAINT Termin_primär PRIMARY KEY (Datum,Semester_FK),
+	CONSTRAINT `Termin ist in` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung)
 );
 
 -- N:M Relationen:
