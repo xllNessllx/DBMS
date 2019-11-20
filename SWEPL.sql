@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS `Student`;
 
 CREATE TABLE Benutzer(
 	ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`E-Mail` VARCHAR(255) NOT NULL UNIQUE,
 	Benutzername VARCHAR(50) NOT NULL UNIQUE,
 	Passwort VARCHAR(50) NOT NULL,
 	IstDozent BOOL NOT NULL,
@@ -39,6 +40,7 @@ CREATE TABLE Student(
 	Matrikelnummer INT(9) UNSIGNED NOT NULL,
 	Vorname VARCHAR(50) NOT NULL,
 	Nachname VARCHAR(50) NOT NULL,
+	`E-Mail` VARCHAR(255) NOT NULL UNIQUE,
 	CONSTRAINT Student_primär PRIMARY KEY (Matrikelnummer),
 	CONSTRAINT Student_eindeutig UNIQUE (Matrikelnummer)
 );
