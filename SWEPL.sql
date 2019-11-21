@@ -29,8 +29,8 @@ CREATE TABLE Gruppe(
 	Semester_FK VARCHAR(7),
 	Gruppennummer VARCHAR(3) NOT NULL,
 	CONSTRAINT Gruppe_primär PRIMARY KEY (ID),
-	CONSTRAINT `Benutzer betreut Gruppe` FOREIGN KEY (Benutzer_FK) REFERENCES `Benutzer`(ID),
-	CONSTRAINT `Gruppe ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung)
+	CONSTRAINT `Benutzer betreut Gruppe` FOREIGN KEY (Benutzer_FK) REFERENCES `Benutzer`(ID) ON DELETE SET NULL,
+	CONSTRAINT `Gruppe ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung) ON DELETE CASCADE
 );
 
 
@@ -43,8 +43,8 @@ CREATE TABLE Student(
 	Matrikelnummer INT(9) UNSIGNED NOT NULL,
 	`E-Mail` VARCHAR(50) NOT NULL,
 	CONSTRAINT Student_primär PRIMARY KEY (ID),
-	CONSTRAINT `Student ist in Gruppe` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID),
-	CONSTRAINT `Student ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung)
+	CONSTRAINT `Student ist in Gruppe` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID) ON DELETE SET NULL,
+	CONSTRAINT `Student ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung) ON DELETE CASCADE
 );
 
 CREATE TABLE Termin(
@@ -56,8 +56,8 @@ CREATE TABLE Termin(
 	Bewertung ENUM('+','-','0') NOT NULL,
 	Kommentar VARCHAR(255),
 	CONSTRAINT Termin_primär PRIMARY KEY (ID),
-	CONSTRAINT `Termin ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung),
-	CONSTRAINT `Termin ist für Gruppe` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID)
+	CONSTRAINT `Termin ist in Semester` FOREIGN KEY (Semester_FK) REFERENCES `Semester`(Kennung) ON DELETE CASCADE,
+	CONSTRAINT `Termin ist für Gruppe` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID) ON DELETE SET NULL
 );
 
 -- N:M Relation
@@ -67,6 +67,6 @@ CREATE TABLE `ist bei`(
 	Student_FK INT UNSIGNED,
 	Termin_FK INT UNSIGNED,
 	CONSTRAINT `ist_bei_primär` PRIMARY KEY (Student_FK,Termin_FK),
-	CONSTRAINT `Student ist bei Termin` FOREIGN KEY (Student_FK) REFERENCES `Student`(ID),
-	CONSTRAINT `Termin ist für Student` FOREIGN KEY (Termin_FK) REFERENCES `Termin`(ID)
+	CONSTRAINT `Student ist bei Termin` FOREIGN KEY (Student_FK) REFERENCES `Student`(ID) ON DELETE CASCADE,
+	CONSTRAINT `Termin ist für Student` FOREIGN KEY (Termin_FK) REFERENCES `Termin`(ID) ON DELETE CASCADE
 );
