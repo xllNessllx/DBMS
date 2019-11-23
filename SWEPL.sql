@@ -74,6 +74,6 @@ CREATE TABLE `betreut`(
 	Benutzer_FK INT UNSIGNED,
 	Gruppe_FK INT UNSIGNED,
 	CONSTRAINT `betreut_primär` PRIMARY KEY (Benutzer_FK,Gruppe_FK),
-	CONSTRAINT `Benutzer betreut Gruppe` FOREIGN KEY (Benutzer_FK) REFERENCES `Benutzer`(ID),
-	CONSTRAINT `Gruppe wird betreut` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID)
+	CONSTRAINT `Benutzer betreut Gruppe` FOREIGN KEY (Benutzer_FK) REFERENCES `Benutzer`(ID) ON DELETE CASCADE,
+	CONSTRAINT `Gruppe wird betreut` FOREIGN KEY (Gruppe_FK) REFERENCES `Gruppe`(ID) ON DELETE CASCADE
 );
